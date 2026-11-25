@@ -1,0 +1,483 @@
+# Painel de edição do site da G3RH (Pages CMS — https://pagescms.org)
+# Cada item abaixo é uma tela do painel e edita um arquivo da pasta conteudo/.
+# Ao clicar em "Save", o painel salva no GitHub e a Cloudflare publica o site
+# sozinha em 1 a 3 minutos.
+
+media:
+  input: public/images
+  output: /images
+  extensions: [jpg, jpeg, png, webp]
+
+content:
+  # ------------------------------------------------------------------
+  - name: geral
+    label: "1. Contatos e dados gerais"
+    type: file
+    path: conteudo/geral.json
+    format: json
+    fields:
+      - name: whatsapp
+        label: WhatsApp
+        type: string
+        required: true
+        description: "Só números, com DDD. Ex.: 71991923417. Vale para todos os botões de WhatsApp do site."
+      - name: telefone
+        label: Telefone
+        type: string
+        description: "Só números, com DDD. Pode ser o mesmo do WhatsApp."
+      - name: email
+        label: E-mail de contato (recebe as propostas)
+        type: string
+        required: true
+        description: "Se trocar, o primeiro envio pelo site manda um e-mail do FormSubmit para o novo endereço. É preciso clicar em Activate."
+      - name: emailCurriculos
+        label: E-mail que recebe os currículos
+        type: string
+        required: true
+        description: "Se trocar, o primeiro currículo enviado gera um e-mail de ativação do FormSubmit. É preciso clicar em Activate."
+      - name: mensagemWhatsapp
+        label: Mensagem pronta do WhatsApp
+        type: text
+        description: "Texto que já aparece escrito quando a pessoa clica no botão do WhatsApp."
+      - name: redes
+        label: Redes sociais
+        type: object
+        list:
+          collapsible:
+            collapsed: true
+            summary: "{rede}"
+        description: "Aparecem no topo, no contato e no rodapé."
+        fields:
+          - name: rede
+            label: Rede
+            type: select
+            required: true
+            options:
+              values: [linkedin, instagram, facebook, youtube]
+          - name: texto
+            label: Texto para leitores de tela
+            type: string
+            description: "Ex.: Instagram da G3RH"
+          - name: link
+            label: Link completo
+            type: string
+            required: true
+            description: "Ex.: https://www.instagram.com/g3rh"
+      - name: contato
+        label: Seção "Contato"
+        type: object
+        fields:
+          - { name: titulo, label: Título, type: string }
+          - { name: texto, label: Texto, type: text }
+      - name: empresa
+        label: Nome da empresa
+        type: string
+        required: true
+      - name: nome
+        label: Nome da administradora
+        type: string
+        required: true
+      - name: cargo
+        label: Cargo principal
+        type: string
+        description: "Aparece embaixo do nome e no Google."
+      - name: titulos
+        label: Títulos (linha curta)
+        type: string
+      - name: slogan
+        label: Slogan
+        type: string
+      - name: posicionamento
+        label: Frase de posicionamento (rodapé)
+        type: text
+
+  # ------------------------------------------------------------------
+  - name: inicio
+    label: "2. Capa (início do site)"
+    type: file
+    path: conteudo/inicio.json
+    format: json
+    fields:
+      - name: titulo
+        label: Título grande
+        type: text
+        required: true
+      - name: texto
+        label: Texto abaixo do título
+        type: text
+      - name: destaques
+        label: Destaques (números da capa)
+        type: object
+        list:
+          max: 4
+          collapsible:
+            collapsed: true
+            summary: "{valor}"
+        fields:
+          - { name: valor, label: "Destaque (ex.: 15 anos)", type: string }
+          - { name: texto, label: Texto abaixo, type: string }
+      - name: fotoFundo
+        label: Foto de fundo
+        type: object
+        description: "Foto horizontal ou quadrada, de preferência de reunião ou treinamento."
+        fields:
+          - { name: src, label: Foto, type: image }
+          - { name: alt, label: Descrição da foto (para acessibilidade), type: string }
+      - name: fotoCristiane
+        label: Foto da Cristiane (sem fundo, aparece no computador)
+        type: object
+        description: "Use uma foto em PNG ou WebP com fundo transparente."
+        fields:
+          - { name: src, label: Foto, type: image }
+          - { name: alt, label: Descrição da foto, type: string }
+
+  # ------------------------------------------------------------------
+  - name: g3rh
+    label: "3. Sobre a G3RH"
+    type: file
+    path: conteudo/g3rh.json
+    format: json
+    fields:
+      - { name: rotulo, label: Nome da seção (texto pequeno), type: string }
+      - { name: titulo, label: Título, type: string }
+      - { name: slogan, label: Slogan, type: string }
+      - { name: abertura, label: Frase de abertura (texto maior), type: text }
+      - name: paragrafos
+        label: Parágrafos
+        type: text
+        list: true
+      - name: foto
+        label: Foto
+        type: object
+        fields:
+          - { name: src, label: Foto, type: image }
+          - { name: alt, label: Descrição da foto, type: string }
+      - name: pilares
+        label: Pilares (cartões coloridos)
+        type: object
+        list:
+          max: 3
+          collapsible:
+            collapsed: true
+            summary: "{titulo}"
+        fields:
+          - &icone
+            name: icone
+            label: Ícone
+            type: select
+            description: "Veja os ícones na página do manual."
+            options:
+              values: [pessoas, equipe, perfil, selecao, curriculo, teste, maleta, treinamento, palestra, conversa, formatura, livro, clima, grafico, crescimento, alvo, medalha, estrela, parceria, cuidado, ideia, quebra-cabeca, jogo, orientacao, agenda, seguranca, destaque]
+          - { name: titulo, label: Título, type: string }
+          - { name: texto, label: Texto, type: text }
+      - { name: diferenciaisTitulo, label: Título dos diferenciais, type: string }
+      - name: diferenciais
+        label: Diferenciais ("Por que escolher a G3RH")
+        type: object
+        list:
+          collapsible:
+            collapsed: true
+            summary: "{titulo}"
+        fields:
+          - *icone
+          - { name: titulo, label: Título, type: string }
+          - { name: texto, label: Texto, type: text }
+      - { name: compromisso, label: Frase de compromisso (centralizada), type: text }
+
+  # ------------------------------------------------------------------
+  - name: servicos
+    label: "4. Serviços"
+    type: file
+    path: conteudo/servicos.json
+    format: json
+    fields:
+      - name: empresas
+        label: Serviços para empresas
+        type: object
+        fields:
+          - { name: rotulo, label: Nome da seção, type: string }
+          - { name: titulo, label: Título, type: string }
+          - { name: introducao, label: Introdução, type: text }
+          - name: foto
+            label: Foto
+            type: object
+            fields:
+              - { name: src, label: Foto, type: image }
+              - { name: alt, label: Descrição da foto, type: string }
+          - name: servicos
+            label: Serviços
+            type: object
+            list:
+              collapsible:
+                collapsed: true
+                summary: "{titulo}"
+            fields:
+              - *icone
+              - { name: titulo, label: Nome do serviço, type: string, required: true }
+              - { name: descricao, label: Descrição, type: text }
+              - name: inclui
+                label: O que está incluído (opcional)
+                type: string
+                list: true
+          - name: cartaoFinal
+            label: Cartão azul "Não encontrou o que precisa?"
+            type: object
+            fields:
+              - { name: titulo, label: Título, type: string }
+              - { name: texto, label: Texto, type: text }
+              - { name: botao, label: Texto do botão, type: string }
+      - name: profissionais
+        label: Serviços para profissionais
+        type: object
+        fields:
+          - { name: rotulo, label: Nome da seção, type: string }
+          - { name: titulo, label: Título, type: string }
+          - { name: introducao, label: Introdução, type: text }
+          - name: foto
+            label: Foto
+            type: object
+            fields:
+              - { name: src, label: Foto, type: image }
+              - { name: alt, label: Descrição da foto, type: string }
+          - name: servicos
+            label: Serviços
+            type: object
+            list:
+              collapsible:
+                collapsed: true
+                summary: "{titulo}"
+            fields:
+              - *icone
+              - { name: titulo, label: Nome do serviço, type: string, required: true }
+              - { name: descricao, label: Descrição, type: text }
+              - name: levaAoCurriculo
+                label: Este cartão leva ao cadastro de currículo
+                type: boolean
+      - name: comoTrabalhamos
+        label: Como trabalhamos (etapas)
+        type: object
+        fields:
+          - { name: titulo, label: Título, type: string }
+          - name: etapas
+            label: Etapas
+            type: object
+            list:
+              collapsible:
+                collapsed: true
+                summary: "{titulo}"
+            fields:
+              - { name: titulo, label: Etapa, type: string }
+              - { name: texto, label: Texto, type: text }
+      - name: necessidades
+        label: Tabela "Necessidades da empresa × Soluções G3RH"
+        type: object
+        fields:
+          - { name: titulo, label: Título, type: string }
+          - { name: colunaNecessidade, label: Título da 1ª coluna, type: string }
+          - { name: colunaSolucao, label: Título da 2ª coluna, type: string }
+          - name: linhas
+            label: Linhas da tabela
+            type: object
+            list:
+              collapsible:
+                collapsed: true
+                summary: "{necessidade}"
+            fields:
+              - { name: necessidade, label: Necessidade da empresa, type: string }
+              - { name: solucao, label: Solução G3RH, type: string }
+              - { name: comoFunciona, label: Como funciona, type: text }
+      - name: chamada
+        label: Quadro "Solicite uma conversa"
+        type: object
+        fields:
+          - { name: titulo, label: Título, type: string }
+          - { name: texto, label: Texto, type: text }
+          - { name: botao, label: Texto do botão, type: string }
+          - { name: mensagemWhatsapp, label: Mensagem pronta do WhatsApp, type: text }
+
+  # ------------------------------------------------------------------
+  - name: cristiane
+    label: "5. Cristiane Almeida"
+    type: file
+    path: conteudo/cristiane.json
+    format: json
+    fields:
+      - { name: rotulo, label: Nome da seção (texto pequeno), type: string }
+      - { name: titulo, label: Título, type: string }
+      - { name: abertura, label: Frase de abertura (texto maior), type: text }
+      - name: paragrafos
+        label: Parágrafos
+        type: text
+        list: true
+      - name: foto
+        label: Foto principal
+        type: object
+        fields:
+          - { name: src, label: Foto, type: image }
+          - { name: alt, label: Descrição da foto, type: string }
+      - name: miniatura
+        label: Foto pequena (redonda, em "Administrada por")
+        type: object
+        description: "Use uma foto quadrada, só do rosto."
+        fields:
+          - { name: src, label: Foto, type: image }
+          - { name: alt, label: Descrição da foto, type: string }
+      - { name: atuacaoTitulo, label: Título da lista de atuação, type: string }
+      - name: atuacao
+        label: Atuação (cargos com descrição)
+        type: object
+        list:
+          collapsible:
+            collapsed: true
+            summary: "{cargo}"
+        fields:
+          - { name: cargo, label: Cargo, type: string }
+          - { name: descricao, label: Descrição, type: text }
+      - name: formacao
+        label: Formação
+        type: object
+        list:
+          collapsible:
+            collapsed: true
+            summary: "{curso}"
+        fields:
+          - { name: curso, label: Curso, type: string }
+          - { name: nivel, label: "Nível (ex.: Graduação)", type: string }
+      - { name: proposito, label: Frase de propósito (quadro laranja), type: text }
+
+  # ------------------------------------------------------------------
+  - name: fotos
+    label: "6. Fotos dos treinamentos"
+    type: file
+    path: conteudo/fotos.json
+    format: json
+    fields:
+      - { name: rotulo, label: Nome da seção, type: string }
+      - { name: titulo, label: Título, type: string }
+      - { name: introducao, label: Introdução, type: text }
+      - name: fotos
+        label: Fotos
+        type: object
+        description: "A ordem da lista é a ordem no site. Arraste para reordenar."
+        list:
+          collapsible:
+            collapsed: true
+            summary: "{legenda}"
+        fields:
+          - { name: foto, label: Foto, type: image, required: true }
+          - { name: legenda, label: Legenda, type: string }
+          - { name: descricao, label: Descrição da foto (para acessibilidade), type: string }
+          - name: destaque
+            label: Foto em destaque (largura toda)
+            type: boolean
+          - name: enquadramento
+            label: Enquadramento (opcional)
+            type: string
+            description: "Ajusta o recorte. 50% 30% mostra mais a parte de cima; 50% 70% mostra mais a de baixo."
+
+  # ------------------------------------------------------------------
+  - name: metodologia
+    label: "7. Metodologia M.EAG"
+    type: file
+    path: conteudo/metodologia.json
+    format: json
+    fields:
+      - { name: rotulo, label: Nome da seção, type: string }
+      - { name: titulo, label: Título, type: string }
+      - { name: introducao, label: Introdução, type: text }
+      - { name: sigla, label: Sigla, type: string }
+      - { name: nome, label: Nome, type: string }
+      - { name: nomeCompleto, label: Nome completo, type: string }
+      - { name: descricao, label: Descrição, type: text }
+      - name: foto
+        label: Foto
+        type: object
+        fields:
+          - { name: src, label: Foto, type: image }
+          - { name: alt, label: Descrição da foto, type: string }
+      - { name: legendaFoto, label: Legenda da foto, type: string }
+      - name: principios
+        label: Princípios
+        type: object
+        list:
+          collapsible:
+            collapsed: true
+            summary: "{titulo}"
+        fields:
+          - *icone
+          - { name: titulo, label: Título, type: string }
+          - { name: texto, label: Texto, type: text }
+
+  # ------------------------------------------------------------------
+  - name: curriculo
+    label: "8. Cadastro de currículo"
+    type: file
+    path: conteudo/curriculo.json
+    format: json
+    fields:
+      - { name: rotulo, label: Nome da seção, type: string }
+      - { name: titulo, label: Título, type: string }
+      - { name: introducao, label: Introdução, type: text }
+      - name: passos
+        label: Passos
+        type: string
+        list: true
+      - name: foto
+        label: Foto
+        type: object
+        fields:
+          - { name: src, label: Foto, type: image }
+          - { name: alt, label: Descrição da foto, type: string }
+      - name: areas
+        label: Áreas de interesse (opções do formulário)
+        type: string
+        list: true
+      - name: niveis
+        label: Níveis profissionais (opções do formulário)
+        type: string
+        list: true
+      - name: tamanhoMaximoMb
+        label: Tamanho máximo do arquivo (MB)
+        type: number
+        description: "Até 10."
+
+  # ------------------------------------------------------------------
+  - name: perguntas
+    label: "9. Perguntas frequentes"
+    type: file
+    path: conteudo/perguntas.json
+    format: json
+    fields:
+      - { name: rotulo, label: Nome da seção, type: string }
+      - { name: titulo, label: Título, type: string }
+      - name: perguntas
+        label: Perguntas
+        type: object
+        list:
+          collapsible:
+            collapsed: true
+            summary: "{pergunta}"
+        fields:
+          - { name: pergunta, label: Pergunta, type: string }
+          - { name: resposta, label: Resposta, type: text }
+
+  # ------------------------------------------------------------------
+  - name: privacidade
+    label: "10. Política de privacidade"
+    type: file
+    path: conteudo/privacidade.json
+    format: json
+    fields:
+      - { name: titulo, label: Título, type: string }
+      - { name: atualizadaEm, label: "Atualizada em (ex.: Novembro de 2026)", type: string }
+      - name: secoes
+        label: Seções
+        type: object
+        description: "No texto, {email} e {email_curriculos} viram os e-mails cadastrados em Contatos."
+        list:
+          collapsible:
+            collapsed: true
+            summary: "{titulo}"
+        fields:
+          - { name: titulo, label: Título, type: string }
+          - { name: texto, label: Texto, type: text }
